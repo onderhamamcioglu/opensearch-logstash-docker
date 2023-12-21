@@ -15,6 +15,7 @@ services:
       - 9600:9600
     networks:
       - opensearch-net
+    restart: unless-stopped
 
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:latest
@@ -29,16 +30,20 @@ services:
       - opensearch-net
     depends_on:
       - opensearch
+    restart: unless-stopped
 
   logstash:
     image: opensearchproject/logstash-oss-with-opensearch-output-plugin:latest
     container_name: logstash
+    ports:
+      - 5044:5044
     networks:
       - opensearch-net
     stdin_open: true
     tty: true
     volumes:
       - ./logstash/pipeline:/usr/share/logstash/pipeline
+    restart: unless-stopped
     
 volumes:
   opensearch-data:
